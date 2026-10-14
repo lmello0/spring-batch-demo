@@ -1,10 +1,14 @@
 spring:
   application:
     name: spring-batch-demo
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
-  sql:
-    init:
-      mode: always
+
+  batch:
+    jdbc:
+      initialize-schema: never
+    job:
+      enabled: false
