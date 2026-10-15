@@ -1,5 +1,6 @@
 package com.lmello.spring_batch_demo.configs;
 
+import com.lmello.spring_batch_demo.listeners.BalanceJobFailureListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -62,9 +63,11 @@ public class BalanceJobConfiguration {
             JobRepository jobRepository,
             @Qualifier("registerFileStep") Step registerFileStep,
             @Qualifier("importBalancesStep") Step importBalanceStep,
-            @Qualifier("completeFileStep") Step completeFileStep
+            @Qualifier("completeFileStep") Step completeFileStep,
+            BalanceJobFailureListener failureListener
     ) {
         return new JobBuilder("balanceImportJob", jobRepository)
+                .listener(failureListener)
                 .start(registerFileStep)
                 .next(importBalanceStep)
                 .next(completeFileStep)

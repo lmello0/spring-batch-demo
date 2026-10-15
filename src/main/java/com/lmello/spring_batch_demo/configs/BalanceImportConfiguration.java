@@ -1,6 +1,7 @@
 package com.lmello.spring_batch_demo.configs;
 
 import com.lmello.spring_batch_demo.domain.BalanceRecord;
+import com.lmello.spring_batch_demo.listeners.BalanceImportLifecycleListener;
 import com.lmello.spring_batch_demo.processors.BalanceRecordProcessor;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
@@ -20,14 +21,15 @@ public class BalanceImportConfiguration {
             PlatformTransactionManager transactionManager,
             FlatFileItemReader<BalanceRecord> balanceFileReader,
             BalanceRecordProcessor processor,
-            JdbcBatchItemWriter<BalanceRecord> balanceFileWriter
-    ) {
+            JdbcBatchItemWriter<BalanceRecord> balanceFileWriter,
+            BalanceImportLifecycleListener lifecycleListener) {
         return new StepBuilder("importBalanceStep", jobRepository)
                 .<BalanceRecord, BalanceRecord>chunk(100)
                 .transactionManager(transactionManager)
                 .reader(balanceFileReader)
                 .processor(processor)
                 .writer(balanceFileWriter)
+                .listener(lifecycleListener)
                 .build();
     }
 }
