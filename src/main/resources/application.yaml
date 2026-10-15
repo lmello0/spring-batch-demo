@@ -11,4 +11,7 @@ spring:
     jdbc:
       initialize-schema: never
     job:
-      enabled: true
+      enabled: false
+
+app:
+  input-folder: input/inbox
